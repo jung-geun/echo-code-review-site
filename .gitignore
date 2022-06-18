@@ -1,0 +1,4 @@
+.settings/*
+.settings/.*
+.vscode/sftp.json
+.metadata
