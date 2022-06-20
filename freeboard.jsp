@@ -1,5 +1,14 @@
+<%@page import="java.util.List"%>
+<%@page import="data.BoardDao"%>
+<%@page import="data.BoardDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+BoardDao boarddao = BoardDao.getInstance();
+int boardcount = boarddao.getBoardCount("자유게시판");
+List<BoardDto> boardlist = boarddao.getBoards("자유게시판");
+System.out.print(boardcount);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,9 +41,9 @@
 		</div>
 	</div>
 
-	
+
 	<%
-		String userID = null;
+	String userID = null;
 	if (session.getAttribute("userID") != null) {
 		userID = (String) session.getAttribute("userID");
 	}
@@ -45,8 +54,8 @@
 			<li class="active"><a href="bbs.jsp">게시판</a></li>
 		</ul>
 		<%
-				if (userID == null) {
-			%>
+		if (userID == null) {
+		%>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -57,8 +66,8 @@
 				</ul></li>
 		</ul>
 		<%
-				} else {
-			%>
+		} else {
+		%>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="dropdown"><a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -68,17 +77,17 @@
 				</ul></li>
 		</ul>
 		<%
-				}
-			%>
+		}
+		%>
 
 	</div>
-	</nav>
-	
+
+
 	<div class="container">
 		<div class="row">
 			<table class="table table-striped"
 				style="text-align: center; border: 1px solid #dddddd">
-				<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>
+				<a href="write.jsp?type=free" class="btn btn-primary pull-right">글쓰기</a>
 				<thead>
 					<tr>
 						<th style="background-color: #eeeeee; text-align: center;">번호</th>
@@ -88,12 +97,21 @@
 					</tr>
 				</thead>
 				<tbody>
+					<%
+					for (int i = 0; i < boardcount; i++) {
+						BoardDto board = boardlist.get(i);
+					%>
+
 					<tr>
-						<td>1</td>
-						<td>안녕하세요</td>
-						<td>홍길동</td>
-						<td>2017-05-04</td>
+						<td><%=board.getNum()%></td>
+						<td><a href="content.jsp?num=<%=board.getNum()%>"><%=board.getTitle()%></a></td>
+						<td><%=board.getID()%></td>
+						<td><%=board.getRegDate()%></td>
 					</tr>
+
+					<%
+					}
+					%>
 				</tbody>
 			</table>
 		</div>

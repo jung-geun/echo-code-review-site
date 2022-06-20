@@ -27,11 +27,11 @@
 							<h4 class="card-title">
 								계정 만들기<br>
 							</h4>
-							<form method="POST" class="my-login-validation" novalidate="">
+							<form method="POST" class="my-login-validation" novalidate="" action="registerProc.jsp">
 
 								<div class="form-group">
 									<input id="id" type="text" class="form-control"
-										placeholder="Id" name="id" required>
+										placeholder="ID" name="ID" required>
 									<div class="invalid-feedback" required autofocus>ID is
 										required</div>
 								</div>
@@ -43,7 +43,7 @@
 								</div>
 
 								<div class="form-group">
-									<input id="tel" type="tel" class="form-control" name="number"
+									<input id="tel" type="tel" class="form-control" name="phone"
 										placeholder="Phone Number" pattern="[0-9]{11}" required>
 									<div class="invalid-feedback">Phone Number is invalid</div>
 								</div>

@@ -1,0 +1,37 @@
+.menu {
+  font-weight: bold !important;
+  color: #33ccff !important;
+}
+
+.menu:hover {
+  color: #ff99cc !important;
+}
+
+.login,
+.logout,
+.admin {
+  background: linear-gradient(-45deg, #33ccff 0%, #ff99cc 100%) !important;
+  color: white !important;
+  border-radius: 10px !important;
+  border: none !important;
+}
+
+.login:hover,
+.logout:hover,
+.admin:hover {
+  color: #8b00ff !important;
+}
+
+.leftpush {
+  margin-left: 10px !important;
+}
+
+.searchbtn {
+  border: none !important;
+  background: linear-gradient(-45deg, #33ccff 0%, #ff99cc 100%) !important;
+  color: white !important;
+}
+
+.searchbtn:hover {
+  color: #8b00ff !important;
+}

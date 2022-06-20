@@ -1,57 +1,68 @@
+<%@page import="data.BoardDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="bbs.BbsDAO" %>
-<%@ page import="java.io.PrintWriter" %>
-<% request.setCharacterEncoding("UTF-8"); %>
-<jsp:useBean id="bbs" class="bbs.Bbs" scope="page"/>
-<jsp:setProperty name="bbs" property="bbsTitle"/>
-<jsp:setProperty name="bbs" property="bbsContent"/>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width" initial-scale="1">
-<title>JSP 게시판 웹 사이트</title>
-</head>
-<body>
-	<%
-		String userID=null;
-		if(session.getAttribute("userID")!=null){
-			userID=(String)session.getAttribute("userID");
-		}
-		if(userID==null){
-			PrintWriter script=response.getWriter();
-			script.println("<script>");
-			script.println("alert('로그인이 필요합니다.')");
-			script.println("location.href='login.jsp'");
-			script.println("</script>");	
-		}
-		else{
-			if(bbs.getBbsTitle()==null || bbs.getBbsContent()==null){
-				PrintWriter script= response.getWriter();
-				script.println("<script>");
-				script.println("alert('제목,게시글 내용이 비어있습니다.')");
-				script.println("history.back()");
-				script.println("</script>");
-			}
-			else{
-				BbsDAO bbsDAO=new BbsDAO();
-				int result = bbsDAO.write(bbs.getBbsTitle(),userID,bbs.getBbsContent());
-				if(result==-1){
-					PrintWriter script= response.getWriter();
-					script.println("<script>");
-					script.println("alert('글쓰기에 실패했습니다.')");
-					script.println("history.back()");
-					script.println("</script>");
-				}
-				else{
-					PrintWriter script= response.getWriter();
-					script.println("<script>");
-					script.println("location.href='bbs.jsp'");
-					script.println("</script>");
-				}
-			}
-		}
-	%>
-</body>
-</html>
+	pageEncoding="UTF-8"%>
+<%@ page import="data.BoardDao"%>
+<%@ page import="java.io.PrintWriter"%>
+<%
+request.setCharacterEncoding("UTF-8");
+%>
+<%
+String userID = (String) session.getAttribute("userID");
+String type = request.getParameter("type");
+
+if (userID == null) {
+	response.sendRedirect("login.jsp");
+} else {
+	String bbsTitle = request.getParameter("bbsTitle");
+	String bbsContent = request.getParameter("bbsContent");
+	System.out.print(type);
+
+	BoardDao dao = BoardDao.getInstance();
+	BoardDto board = new BoardDto();
+	board.setID(userID);
+	board.setContent(bbsContent);
+	board.setTitle(bbsTitle);
+
+	int result = 0;
+	if (type.equals("자유게시판")) {
+		result = dao.insertBoard(board, type); // type : 1 : 자유게시판, 2 : 질문게시판
+	} else if (type.equals("질문게시판")) {
+		result = dao.insertBoard_qna(board, type);
+	}
+
+	if (result == 1) {
+%>
+<script type="text/javascript">
+	alert("게시글이 등록되었습니다.");
+</script>
+<%
+if (type == "자유게시판") {
+	response.sendRedirect("freeboard.jsp");
+} else {
+	response.sendRedirect("qnaboard.jsp");
+}
+} else if (result == 0) {
+%>
+<script type="text/javascript">
+	alert("게시글 등록에 실패하였습니다.");
+</script>
+<%
+if (type == "자유게시판") {
+	response.sendRedirect("freeboard.jsp");
+} else {
+	response.sendRedirect("qnaboard.jsp");
+}
+} else if (result == -1) {
+%><script type="text/javascript">
+	alert("게시글 등록에 실패하였습니다.");
+</script>
+<%
+if (type == "자유게시판") {
+	response.sendRedirect("freeboard.jsp");
+} else {
+	response.sendRedirect("qnaboard.jsp");
+}
+}
+
+}
+%>
